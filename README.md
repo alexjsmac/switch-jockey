@@ -1,2 +1,2 @@
-# switch-jockey
+# SwitchJockey
 An intelligent, automated video switcher for live performances
