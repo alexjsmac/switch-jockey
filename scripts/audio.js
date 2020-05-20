@@ -51,6 +51,7 @@ else {
     "callback": features => {
       //console.log(features);
       valence_prediction(features);
+      arousal_prediction(features);
       levelRangeElement.value = features.rms;
     }
   });

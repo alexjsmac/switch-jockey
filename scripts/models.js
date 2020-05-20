@@ -1,4 +1,22 @@
-let model;
+let valence_model;
+let arousal_model;
+
+var count = 0;
+
+var feature_data = {
+  "energy": new Array(),
+  "perceptualSharpness": new Array(),
+  "perceptualSpread": new Array(),
+  "rms": new Array(),
+  "spectralCentroid": new Array(),
+  "spectralFlatness": new Array(),
+  "spectralKurtosis": new Array(),
+  "spectralRolloff": new Array(),
+  "spectralSkewness": new Array(),
+  "spectralSlope": new Array(),
+  "spectralSpread": new Array(),
+  "zcr": new Array()
+}
 
 var stats = {
   "energy": [4.429195e+01, 7.330021e+01],
@@ -16,22 +34,45 @@ var stats = {
 }
 
 async function load() {
-  model = await tf.loadGraphModel('./assets/model.json');
-  console.log("Model loaded");
+  valence_model = await tf.loadGraphModel('./assets/models/valence/model.json');
+  arousal_model = await tf.loadGraphModel('./assets/models/arousal/model.json');
+  console.log("Models loaded");
 }
 
 function valence_prediction(features) {
-  var array_values = new Array();
   for (var key in features) {
     normed_val = (features[key] - stats[key][0]) / stats[key][1];
-    array_values.push(normed_val);
+    feature_data[key].push(normed_val);
   }
-  tensor = tf.tensor(array_values);
+  count += 1;
+  if (count > 49) {
+    buffer = new Array();
+    for (var key in features) {
+      buffer = buffer.concat(feature_data[key]);
+      feature_data[key].shift();
+    }
+    tensor = tf.tensor(buffer);
+    input = tf.reshape(tensor, [-1, 600]);
+    result = valence_model.predict(input).arraySync();
+    var table = document.getElementById('valence-table');
+    table.rows[0].cells[1].innerText = result[0][0].toFixed(2);
+    valenceRangeElement = document.getElementById("valenceRange");
+    valenceRangeElement.value = result[0][0].toFixed(2);
+  }
+}
+
+function arousal_prediction(features) {
+  var arousal_values = new Array();
+  for (var key in features) {
+    normed_val = (features[key] - stats[key][0]) / stats[key][1];
+    arousal_values.push(normed_val);
+  }
+  tensor = tf.tensor(arousal_values);
   input = tf.reshape(tensor, [-1, 12]);
-  result = model.predict(input).arraySync();
-  var table = document.getElementById('table');
+  result = arousal_model.predict(input).arraySync();
+  var table = document.getElementById('arousal-table');
   table.rows[0].cells[1].innerText = result[0][0].toFixed(2);
-  valenceRangeElement = document.getElementById("valenceRange");
+  valenceRangeElement = document.getElementById("arousalRange");
   valenceRangeElement.value = result[0][0].toFixed(2);
 }
 
