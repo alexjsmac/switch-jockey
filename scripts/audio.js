@@ -50,8 +50,8 @@ else {
     // second.
     "callback": features => {
       //console.log(features);
-      valence_prediction(features);
-      arousal_prediction(features);
+      prediction('valence', features);
+      prediction('arousal', features);
       levelRangeElement.value = features.rms;
     }
   });
