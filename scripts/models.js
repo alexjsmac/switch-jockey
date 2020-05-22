@@ -1,8 +1,4 @@
-var models;
-var normed_stats;
-var count = 0;
-
-var features_dict = {
+let features_dict = {
   "energy": new Array(),
   "perceptualSharpness": new Array(),
   "perceptualSpread": new Array(),
@@ -25,22 +21,21 @@ async function load() {
   console.log("Models loaded");
 }
 
-function prediction(target, current_features) {
-  for (var key in current_features) {
+function prediction(current_features) {
+  for (let key in current_features) {
     features_dict[key].push(current_features[key]);
   }
-  count += 1;
 
   // Wait until each feature array has 50 values
-  if (count > 49) {
-    buffer = new Array();
-    for (var key in features_dict) {
+  if (features_dict[Object.keys(features_dict)[0]].length > 49) {
+    let buffer = new Array();
+    for (let key in features_dict) {
 
       // Normalize feature values in current window
-      normed_values = new Array();
-      mean = math.mean(features_dict[key]);
-      std = math.std(features_dict[key]);
-      for (i = 0; i < features_dict[key].length; i++) {
+      let normed_values = new Array();
+      const mean = math.mean(features_dict[key]);
+      const std = math.std(features_dict[key]);
+      for (let i = 0; i < features_dict[key].length; i++) {
         normed_values.push((features_dict[key][i] - mean) / std);
       }
 
@@ -50,13 +45,15 @@ function prediction(target, current_features) {
       // Remove oldest value from each feature array
       features_dict[key].shift();
     }
-    tensor = tf.tensor(buffer);
-    input = tf.reshape(tensor, [-1, 600]);
-    result = models[target].predict(input).arraySync();
-    table = document.getElementById(`${target}-table`);
-    table.rows[0].cells[1].innerText = result[0][0].toFixed(2);
-    targetRangeElement = document.getElementById(`${target}Range`);
-    targetRangeElement.value = result[0][0].toFixed(2);
+    const tensor = tf.tensor(buffer);
+    const input = tf.reshape(tensor, [-1, 600]);
+    for (let model in models) {
+      const result = models[model].predict(input).arraySync();
+      const table = document.getElementById(`${model}-table`);
+      table.rows[0].cells[1].innerText = result[0][0].toFixed(2);
+      const targetRangeElement = document.getElementById(`${model}Range`);
+      targetRangeElement.value = result[0][0].toFixed(2);
+    }
   }
 }
 

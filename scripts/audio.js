@@ -49,9 +49,9 @@ else {
     // calculates a new level. This function will be called around 86 times per
     // second.
     "callback": features => {
-      //console.log(features);
-      prediction('valence', features);
-      prediction('arousal', features);
+      if (features.rms > 0) {
+        prediction(features);
+      }
       levelRangeElement.value = features.rms;
     }
   });
