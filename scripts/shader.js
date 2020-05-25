@@ -24,6 +24,7 @@ async function main() {
     -1, // near,
      1, // far
   );
+  let scene = new THREE.Scene();
   const scene1 = new THREE.Scene();
   const scene2 = new THREE.Scene();
   const plane = new THREE.PlaneBufferGeometry(2, 2);
@@ -41,7 +42,6 @@ async function main() {
     uniforms,
   });
   scene1.add(new THREE.Mesh(plane, material1));
-  console.log(scene1);
 
   const material2 = new THREE.ShaderMaterial({
     fragmentShader: fragmentShader2,
@@ -60,6 +60,13 @@ async function main() {
     return needResize;
   }
 
+  function changeScene() {
+      var div = document.getElementById("curtain");
+      div.classList.remove("screen-change");
+      div.offsetWidth;
+      div.classList.add("screen-change");
+  }
+
   function render(time) {
     time *= 0.001;  // convert to seconds
 
@@ -71,10 +78,17 @@ async function main() {
 
     const slider = document.getElementById('movementRange');
     if (slider.value > 0.5) {
-      renderer.render(scene1, camera);
+      if (scene != scene1) {
+        scene = scene1;
+        changeScene();
+      }
     } else {
-      renderer.render(scene2, camera);
+      if (scene != scene2) {
+        scene = scene2;
+        changeScene();
+      }
     }
+    renderer.render(scene, camera);
 
     requestAnimationFrame(render);
   }

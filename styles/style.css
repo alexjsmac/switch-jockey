@@ -1,17 +1,24 @@
-/* CSS files add styling rules to your content */
-
 body {
-  font-family: "Benton Sans", "Helvetica Neue", helvetica, arial, sans-serif;
   margin: 2em;
 }
 
-h1 {
-  font-style: italic;
-  color: #373fff;
+div {
+  width: 800px;
+  height: 200px;
 }
 
-#c {
-  width: 100vw;
-  height: 100vh;
-  display: block;
+#curtain {
+  background: black;
+}
+
+.screen-change {
+  animation-name: screen-change;
+  animation-duration: 0.25s;
+}
+
+@keyframes screen-change {
+  0% {opacity: 1;}
+  30% {opacity: 0;}
+  70% {opacity: 0;}
+  100% {opacity: 1;}
 }
