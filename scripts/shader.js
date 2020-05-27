@@ -73,7 +73,7 @@ async function main() {
   const scene2 = new THREE.Scene();
   const plane = new THREE.PlaneBufferGeometry(2, 2);
 
-  const fragmentShader1 = await loadShader('assets/shaders/simple2.frag');
+  const fragmentShader1 = await loadShader('assets/shaders/shader1.frag');
   const fragmentShader2 = await loadShader('assets/shaders/shader2.frag');
 
   const uniforms = {
@@ -105,13 +105,6 @@ async function main() {
     return needResize;
   }
 
-  function changeScene() {
-      var div = document.getElementById("curtain");
-      div.classList.remove("screen-change");
-      div.offsetWidth;
-      div.classList.add("screen-change");
-  }
-
   function render(time) {
     time *= 0.001;  // convert to seconds
 
@@ -123,15 +116,13 @@ async function main() {
     uniforms.iChannel0.value = audioData;
 
     const slider = document.getElementById('movementRange');
-    if (slider.value <= 1) {
+    if (slider.value <= 0.5) {
       if (scene != scene1) {
         scene = scene1;
-        changeScene();
       }
     } else {
       if (scene != scene2) {
         scene = scene2;
-        changeScene();
       }
     }
     renderer.render(scene, camera);
