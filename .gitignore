@@ -1,1 +1,4 @@
 .DS_Store
+server.pem
+simple-https-server.py
+assets/music/
