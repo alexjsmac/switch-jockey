@@ -47,12 +47,12 @@ async function main() {
 
     microphone_stream = audioContext.createMediaStreamSource(stream);
 
-    script_processor_fft_node = audioContext.createScriptProcessor(2048, 1, 1);
+    script_processor_fft_node = audioContext.createScriptProcessor(1024, 1, 1);
     script_processor_fft_node.connect(gain_node);
 
     analyser = audioContext.createAnalyser();
-    analyser.smoothingTimeConstant = 0;
-    analyser.fftSize = 2048;
+    // analyser.smoothingTimeConstant = 0;
+    analyser.fftSize = 1024;
 
     microphone_stream.connect(analyser);
 
@@ -72,13 +72,16 @@ async function main() {
   const scene2 = new THREE.Scene();
   const plane = new THREE.PlaneBufferGeometry(2, 2);
 
-  const fragmentShader1 = await loadShader('assets/shaders/shader1.frag');
+  const fragmentShader1 = await loadShader('assets/shaders/audio1.frag');
   const fragmentShader2 = await loadShader('assets/shaders/shader2.frag');
+
+  var texture = new THREE.DataTexture(audioData, 512, 2, THREE.UnsignedByteType);
 
   const uniforms = {
     iTime: { value: 0 },
     iResolution:  { value: new THREE.Vector3() },
-    iChannel0: { value: audioData }
+    iChannel0: texture,
+    brightness: { value: 0 }
   };
 
   const material1 = new THREE.ShaderMaterial({
@@ -111,9 +114,13 @@ async function main() {
     const canvas = renderer.domElement;
     uniforms.iResolution.value.set(canvas.width, canvas.height, 1);
     uniforms.iTime.value = time;
-    uniforms.iChannel0.value = audioData;
+    uniforms.iChannel0.image.data = audioData;
+    // console.log(uniforms.iChannel0.image.data);
 
-    const slider = document.getElementById('movementRange');
+    const brightSlider = document.getElementById('brightnessRange');
+    uniforms.brightness.value = brightSlider.value;
+
+    const slider = document.getElementById('movementRange'); // move out of render loop
     if (slider.value <= 0.5) {
       if (scene != scene1) {
         scene = scene1;

@@ -21,7 +21,7 @@ uniform sampler2D iChannel0;
 void mainImage(out vec4 fragColor, in vec2 fragCoord)
 {
 	vec2 c = fragCoord.xy / iResolution.xy;
-	float s = TEXTURE2D(iChannel0, c * .5).r;
+	float s = texture2D(iChannel0, c * .5).r;
 	c = vec2(0, A*s*sin((c.x*W+iTime*V)* 2.5)) + (c*2.-1.);
 	float g = max(abs(s/(pow(c.y, 2.1*sin(s*P))))*T,
 				  abs(.1/(c.y+E)));
