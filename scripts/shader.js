@@ -30,7 +30,6 @@ async function main() {
   const canvas = document.querySelector('#c');
   const renderer = new THREE.WebGLRenderer({canvas});
   renderer.autoClearColor = false;
-  renderer.setSize( window.innerWidth/2, window.innerHeight/2 );
 
   const camera = new THREE.OrthographicCamera(
     -1, // left

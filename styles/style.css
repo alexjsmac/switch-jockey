@@ -1,24 +1,3 @@
 body {
   margin: 2em;
 }
-
-div {
-  width: 800px;
-  height: 200px;
-}
-
-#curtain {
-  background: black;
-}
-
-.screen-change {
-  animation-name: screen-change;
-  animation-duration: 0.25s;
-}
-
-@keyframes screen-change {
-  0% {opacity: 1;}
-  30% {opacity: 0;}
-  70% {opacity: 0;}
-  100% {opacity: 1;}
-}
