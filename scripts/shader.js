@@ -95,11 +95,10 @@ async function main() {
 
   function resizeRendererToDisplaySize(renderer) {
     const canvas = renderer.domElement;
-    const width = canvas.clientWidth;
-    const height = canvas.clientHeight;
-    const needResize = canvas.width !== width || canvas.height !== height;
+    const needResize = canvas.width !== window.innerWidth ||
+      canvas.height !== window.innerHeight;
     if (needResize) {
-      renderer.setSize(width, height, false);
+      renderer.setSize(window.innerWidth, window.innerHeight);
     }
     return needResize;
   }
