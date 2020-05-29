@@ -1,11 +1,13 @@
+#include <common>
+
 uniform vec3      iResolution;
 uniform float     iTime;
 uniform sampler2D iChannel0;
 
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
-    // create pixel coordinates
-	vec2 uv = fragCoord.xy / iResolution.xy;
+  // Normalized pixel coordinates (from 0 to 1)
+	vec2 uv = fragCoord / iResolution.xy;
 
 	// first texture row is frequency data
 	float fft  = texture2D( iChannel0, vec2(uv.x,0.25) ).x;
