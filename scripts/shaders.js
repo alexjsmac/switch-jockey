@@ -2,21 +2,39 @@ import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threej
 
 let analyser, audioData, uniforms;
 
-let fragmentShaders = new Array();
 let scenes = new Array();
 
-const movement = document.getElementById('movementRange');
-const brightness = document.getElementById('brightnessRange');
-const complexity = document.getElementById('complexityRange');
-const contrast = document.getElementById('contrastRange');
+const sliders = {
+  'brightness': document.getElementById('brightnessRange'),
+  'complexity': document.getElementById('complexityRange'),
+  'contrast': document.getElementById('contrastRange'),
+  'movement': document.getElementById('movementRange')
+}
 
-const shaderFiles = ['audio1', 'audio2', 'audio3', 'audio4'];
+const shaders = {
+  '0000': 'audio1',
+  '0001': 'audio2',
+  '0010': 'audio3',
+  '0011': 'audio4',
+  '0100': 'audio5',
+  '0101': 'audio6',
+  '0110': 'audio7',
+  '0111': 'audio8',
+  '1000': 'audio1',
+  '1001': 'audio2',
+  '1010': 'audio3',
+  '1011': 'audio4',
+  '1100': 'audio5',
+  '1101': 'audio6',
+  '1110': 'audio7',
+  '1111': 'audio8'
+}
 
 const loadShaders = async () => {
-  for (let i in shaderFiles) {
-    let response = await fetch(`assets/shaders/${shaderFiles[i]}.frag`);
+  for (let i in shaders) {
+    let response = await fetch(`assets/shaders/${shaders[i]}.frag`);
     let text = await response.text();
-    fragmentShaders.push(text);
+    shaders[i] = text;
   }
 }
 
@@ -54,15 +72,15 @@ function createScene() {
     iChannel0: { value: new THREE.DataTexture(audioData, analyser.fftSize/2, 1, THREE.LuminanceFormat) }
   };
 
-  for (let i in fragmentShaders) {
+  for (let i in shaders) {
     const material = new THREE.ShaderMaterial({
-      fragmentShader: fragmentShaders[i],
+      fragmentShader: shaders[i],
       uniforms,
     });
 
     const scene = new THREE.Scene();
     scene.add(new THREE.Mesh(plane, material));
-    scenes.push(scene);
+    scenes[i] = scene;
   }
 }
 
@@ -90,12 +108,16 @@ function animate(time){
   uniforms.iResolution.value.set(canvas.width, canvas.height, 1);
   uniforms.iChannel0.value.needsUpdate = true;
 
-  if (movement.value <= 0.5) {
-    scene = scenes[0];
-  } else {
-    scene = scenes[1];
+  let goal = '';
+  for (let i in sliders) {
+    if (sliders[i].value < 0.5) {
+      goal += '0';
+    } else {
+      goal += '1';
+    }
   }
 
+  scene = scenes[goal];
   renderer.render(scene, camera);
 }
 
