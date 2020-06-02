@@ -16,6 +16,7 @@ Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
 uniform vec3      iResolution;
 uniform float     iTime;
 uniform sampler2D iChannel0;
+uniform float     brightness;
 
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
@@ -45,7 +46,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     vec3 ledColor = led*color*mask;
 
     // output final color
-    fragColor = vec4(ledColor, 1.0);
+    fragColor = vec4(ledColor, 1.0) * brightness;
 }
 
 void main() {

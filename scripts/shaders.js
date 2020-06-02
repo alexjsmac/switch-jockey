@@ -12,22 +12,14 @@ const sliders = {
 }
 
 const shaders = {
-  '0000': 'audio1',
-  '0001': 'audio2',
-  '0010': 'audio3',
-  '0011': 'audio4',
-  '0100': 'audio5',
-  '0101': 'audio6',
-  '0110': 'audio7',
-  '0111': 'audio8',
-  '1000': 'audio1',
-  '1001': 'audio2',
-  '1010': 'audio3',
-  '1011': 'audio4',
-  '1100': 'audio5',
-  '1101': 'audio6',
-  '1110': 'audio7',
-  '1111': 'audio8'
+  '000': 'audio7',
+  '001': 'audio2',
+  '010': 'audio3',
+  '011': 'audio4',
+  '100': 'audio5',
+  '101': 'audio8',
+  '110': 'audio1',
+  '111': 'audio6',
 }
 
 const loadShaders = async () => {
@@ -69,7 +61,8 @@ function createScene() {
   uniforms = {
     iTime: { value: 0 },
     iResolution:  { value: new THREE.Vector3() },
-    iChannel0: { value: new THREE.DataTexture(audioData, analyser.fftSize/2, 1, THREE.LuminanceFormat) }
+    iChannel0: { value: new THREE.DataTexture(audioData, analyser.fftSize/2, 1, THREE.LuminanceFormat) },
+    brightness: { value: 1.0 }
   };
 
   for (let i in shaders) {
@@ -107,9 +100,10 @@ function animate(time){
   uniforms.iTime.value = time;
   uniforms.iResolution.value.set(canvas.width, canvas.height, 1);
   uniforms.iChannel0.value.needsUpdate = true;
+  uniforms.brightness.value = sliders['brightness'].value;
 
   let goal = '';
-  for (let i in sliders) {
+  for (let i of ['complexity', 'contrast', 'movement']) {
     if (sliders[i].value < 0.5) {
       goal += '0';
     } else {

@@ -6,9 +6,10 @@
 #define TEXTURE2D texture
 #endif
 
-uniform vec3 iResolution;
-uniform float iTime;
+uniform vec3 			iResolution;
+uniform float 		iTime;
 uniform sampler2D iChannel0;
+uniform float     brightness;
 
 const int iters = 150;
 
@@ -66,7 +67,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord ) {
     vec4 fract01 =  vec4( c , 1.0 );
     vec4 salida;
     salida = fract01 / t3 + fract01 * t3 + vec4(invFract,0.6) + vec4(fract4,0.3);
-	fragColor = salida;
+	fragColor = salida * brightness;
 }
 
 void main() {

@@ -4,9 +4,10 @@
 #define TEXTURE2D texture
 #endif
 
-uniform vec3 iResolution;
-uniform float iTime;
+uniform vec3      iResolution;
+uniform float     iTime;
 uniform sampler2D iChannel0;
+uniform float     brightness;
 
 float circle(vec2 uv, float r, float blur) {
  	float d = length((uv)*5.0);
@@ -48,7 +49,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     color += color2;
     color += vec3(0.0,sin(uv.y*20.0)*sin(iTime/5.0),sin(uv.y*20.0));
 
-	fragColor = vec4(color,1.0);
+	fragColor = vec4(color,1.0) * brightness;
 }
 
 void main() {

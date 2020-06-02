@@ -4,9 +4,10 @@
 #define TEXTURE2D texture
 #endif
 
-uniform vec3 iResolution;
-uniform float iTime;
+uniform vec3      iResolution;
+uniform float     iTime;
 uniform sampler2D iChannel0;
+uniform float     brightness;
 
 float hz(float hz)
 {
@@ -36,7 +37,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         max(0.0,min(1.0,sin(50.0*uv.x)*sin(50.0*uvy2)));
     col += vec3(1.0,1.0,1.0) * a1;
 
-    fragColor = vec4(col,1.0);
+    fragColor = vec4(col,1.0) * brightness;
 }
 
 void main() {

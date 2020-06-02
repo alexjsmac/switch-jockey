@@ -4,9 +4,10 @@
 #define TEXTURE2D texture
 #endif
 
-uniform vec3 iResolution;
-uniform float iTime;
+uniform vec3      iResolution;
+uniform float     iTime;
 uniform sampler2D iChannel0;
+uniform float     brightness;
 
 float squared(float value) { return value * value; }
 
@@ -38,7 +39,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                       glowWidth * (2.0 - cos(iTime * 0.19)));
 	}
 
-	fragColor = vec4((color / 2.0) * (getWeight(squared(i) * 20.0) * 2.5), 1.0);
+	fragColor = vec4((color / 2.0) * (getWeight(squared(i) * 20.0) * 2.5), 1.0) * brightness;
 }
 
 void main() {

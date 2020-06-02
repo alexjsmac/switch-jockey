@@ -3,6 +3,7 @@
 uniform vec3      iResolution;
 uniform float     iTime;
 uniform sampler2D iChannel0;
+uniform float     brightness;
 
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
@@ -24,7 +25,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     col = pow( col, vec3(1.0,0.5,2.0) );
 
 	// output final color
-	fragColor = vec4(col,1.0);
+	fragColor = vec4(col,1.0) * brightness;
 }
 
 void main() {

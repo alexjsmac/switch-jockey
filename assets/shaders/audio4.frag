@@ -2,9 +2,10 @@
 
 precision mediump float;
 
-uniform vec3 iResolution;
-uniform float iTime;
+uniform vec3      iResolution;
+uniform float     iTime;
 uniform sampler2D iChannel0;
+uniform float     brightness;
 
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
@@ -20,7 +21,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     c[i] = 0.01 / length(abs(mod(uv, 1.0) - 0.5));
   }
   float intensity = texture2D(iChannel0, vec2(l, 0.5)).x;
-  fragColor = vec4(c / l * intensity, iTime);
+  fragColor = vec4(c / l * intensity, iTime) * brightness;
 }
 
 void main() {
