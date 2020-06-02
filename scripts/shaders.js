@@ -59,10 +59,23 @@ function createScene() {
   const plane = new THREE.PlaneBufferGeometry(2, 2);
 
   uniforms = {
-    iTime: { value: 0 },
-    iResolution:  { value: new THREE.Vector3() },
+
+    // Shadertoy
+    iResolution:  { value: new THREE.Vector3() },   // viewport resolution (in pixels)
+    iTime: { value: 0 },                            // shader playback time (in seconds)
+    iTimeDelta: { value: null },                    // render time (in seconds)
+    iFrame: { value: null },                        // shader playback frame
+    iChannelTime: { value: null },                  // channel playback time (in seconds)
+    iChannelResolution: { value: null },            // channel resolution (in pixels)
+    iMouse: { value: null },                        // mouse pixel coords. xy: current (if MLB down), zw: click
     iChannel0: { value: new THREE.DataTexture(audioData, analyser.fftSize/2, 1, THREE.LuminanceFormat) },
-    brightness: { value: 1.0 }
+    iCHannel1: { value: null },                     // input channel. XX = 2D/Cube
+    iChannel2: { value: null },                     // input channel. XX = 2D/Cube
+    iChannel3: { value: null },                     // input channel. XX = 2D/Cube
+    iDate: {value: null },                          // (year, month, day, time in seconds)
+
+    // Custom
+    brightness: { value: 1.0 }                      // brightness master control
   };
 
   for (let i in shaders) {
