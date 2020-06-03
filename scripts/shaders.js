@@ -1,6 +1,6 @@
 import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threejs/r115/build/three.module.js';
 
-let analyser, audioData, uniforms;
+let analyser, audioData, uniforms, lastBrightness, scene, nextScene = null;
 
 let scenes = new Array();
 
@@ -88,6 +88,7 @@ function createScene() {
     scene.add(new THREE.Mesh(plane, material));
     scenes[i] = scene;
   }
+  scene = scenes['000'];
 }
 
 function resizeRendererToDisplaySize(renderer) {
@@ -100,8 +101,6 @@ function resizeRendererToDisplaySize(renderer) {
 }
 
 function animate(time){
-  let scene;
-
   requestAnimationFrame( animate );
 
   resizeRendererToDisplaySize(renderer);
@@ -113,7 +112,6 @@ function animate(time){
   uniforms.iTime.value = time;
   uniforms.iResolution.value.set(canvas.width, canvas.height, 1);
   uniforms.iChannel0.value.needsUpdate = true;
-  uniforms.brightness.value = sliders['brightness'].value;
 
   let goal = '';
   for (let i of ['complexity', 'contrast', 'movement']) {
@@ -124,7 +122,33 @@ function animate(time){
     }
   }
 
-  scene = scenes[goal];
+  // If a new scene is needed
+  if (scene != scenes[goal] && nextScene == null) {
+    lastBrightness = sliders['brightness'].value;
+    nextScene = scenes[goal];
+  }
+  // Bring down the brightness each frame
+  if (nextScene != null) {
+    uniforms.brightness.value -= 0.1;
+  }
+  // When the brightness has been turned down switch the scene
+  if (uniforms.brightness.value < 0 && nextScene != null) {
+    scene = nextScene;
+    nextScene = null;
+  }
+  // Return brightness to previous amount a little bit each frame
+  if (uniforms.brightness.value != lastBrightness && lastBrightness != null && nextScene == null){
+    uniforms.brightness.value += 0.1;
+  }
+  // Once the brightness has returned, clear the brightness target
+  if (uniforms.brightness.value >= lastBrightness) {
+    lastBrightness = null;
+  }
+  // Otherwise, follow the brightness fader
+  if (nextScene == null && lastBrightness == null) {
+    uniforms.brightness.value = sliders['brightness'].value;
+  }
+
   renderer.render(scene, camera);
 }
 
