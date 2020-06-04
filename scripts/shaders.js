@@ -11,22 +11,20 @@ const sliders = {
   'movement': document.getElementById('movementRange')
 }
 
-const shaders = {
-  '000': 'audio7',
-  '001': 'audio2',
-  '010': 'audio3',
-  '011': 'audio4',
-  '100': 'audio5',
-  '101': 'audio8',
-  '110': 'audio1',
-  '111': 'audio6',
-}
+const shaders = new Array();
+const coordinates = [[0.1, 0.2, 0.3], [0.2, 0.3, 0.4], [0.3, 0.4, 0.5],
+                     [0.4, 0.5, 0.6], [0.5, 0.6, 0.7], [0.6, 0.6, 0.8],
+                     [0.7, 0.8, 0.9], [0.8, 0.9, 0.1]];
 
 const loadShaders = async () => {
-  for (let i in shaders) {
-    let response = await fetch(`assets/shaders/${shaders[i]}.frag`);
-    let text = await response.text();
-    shaders[i] = text;
+  for (let i = 1; i <= coordinates.length; i++) {
+    let response = await fetch(`assets/shaders/audio${i}.frag`);
+    let code = await response.text();
+    shaders.push({
+      'name': `audio${i}`,
+      'coordinates': coordinates[i-1],
+      'code': code
+    })
   }
 }
 
@@ -80,15 +78,15 @@ function createScene() {
 
   for (let i in shaders) {
     const material = new THREE.ShaderMaterial({
-      fragmentShader: shaders[i],
+      fragmentShader: shaders[i]['code'],
       uniforms,
     });
 
     const scene = new THREE.Scene();
     scene.add(new THREE.Mesh(plane, material));
-    scenes[i] = scene;
+    scenes.push({'coordinates': [shaders[i]['coordinates']], 'scene': scene});
   }
-  scene = scenes['000'];
+  scene = scenes[0]['scene'];
 }
 
 function resizeRendererToDisplaySize(renderer) {
@@ -100,8 +98,21 @@ function resizeRendererToDisplaySize(renderer) {
   return needResize;
 }
 
+function findNearestNeighbour(goal) {
+  let nearestNeighbour = null;
+  let shortestDistance = 1000000;
+  for (let i in scenes) {
+    let distance = math.distance(scenes[i]['coordinates'][0], goal);
+    if (distance < shortestDistance) {
+      nearestNeighbour = scenes[i];
+      shortestDistance = distance;
+    }
+  }
+  return nearestNeighbour;
+}
+
 function animate(time){
-  requestAnimationFrame( animate );
+  requestAnimationFrame(animate);
 
   resizeRendererToDisplaySize(renderer);
 
@@ -113,19 +124,17 @@ function animate(time){
   uniforms.iResolution.value.set(canvas.width, canvas.height, 1);
   uniforms.iChannel0.value.needsUpdate = true;
 
-  let goal = '';
+  let goal = [];
   for (let i of ['complexity', 'contrast', 'movement']) {
-    if (sliders[i].value < 0.5) {
-      goal += '0';
-    } else {
-      goal += '1';
-    }
+    goal.push(parseFloat(sliders[i].value));
   }
 
+  let nearestNeighbour = findNearestNeighbour(goal);
+
   // If a new scene is needed
-  if (scene != scenes[goal] && nextScene == null) {
+  if (scene != nearestNeighbour['scene'] && nextScene == null) {
     lastBrightness = sliders['brightness'].value;
-    nextScene = scenes[goal];
+    nextScene = nearestNeighbour['scene'];
   }
   // Bring down the brightness each frame
   if (nextScene != null) {
