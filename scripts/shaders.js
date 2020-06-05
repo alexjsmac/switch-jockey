@@ -1,5 +1,3 @@
-import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threejs/r115/build/three.module.js';
-
 let analyser, audioData, uniforms, lastBrightness, scene, nextScene = null;
 
 let scenes = new Array();

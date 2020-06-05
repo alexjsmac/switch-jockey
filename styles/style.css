@@ -15,3 +15,7 @@ label {
   background-color: lightgrey;
   padding: 0.125em;
 }
+
+table {
+  background-color: lightgrey;
+}

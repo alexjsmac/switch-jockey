@@ -6,13 +6,72 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="#">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/7.0.0/math.min.js"></script>
-    <script type="module" src="scripts/shaders.js"></script>
+    <script src="https://unpkg.com/meyda/dist/web/meyda.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/7.0.0/math.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r99/three.min.js"></script>
+    <script src="scripts/audio.js" async></script>
+    <script src="scripts/models.js" async></script>
+    <script src="scripts/shaders.js" async></script>
     <link rel="stylesheet" type="text/css" href="styles/style.css">
   </head>
   <body>
     <button>Start Web Audio</button>
     <br><br>
+    <audio
+           controls
+           loop
+           crossorigin="anonymous"
+           id="audio"
+           src="assets/music/trimmed.wav"
+           >
+    </audio>
+    <br><br>
+    <label for="level">Level</label>
+    <input type="range"
+           id="levelRange"
+           name="level"
+           min="0.0"
+           max="1.0"
+           step="0.001"
+           />
+    <br><br>
+    <label for="valence">Valence</label>
+    <input type="range"
+           id="valenceRange"
+           name="valence"
+           min="-1.0"
+           max="1.0"
+           step="0.001"
+           />
+    <br><br>
+    <table id="valence-table">
+      <tbody>
+        <tr>
+          <td>Valence:</td>
+          <td>0.0</td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    <label for="arousal">Arousal</label>
+    <input type="range"
+           id="arousalRange"
+           name="arousal"
+           min="-1.0"
+           max="1.0"
+           step="0.001"
+           />
+    <br><br>
+    <table id="arousal-table">
+      <tbody>
+        <tr>
+          <td>Arousal:</td>
+          <td>0.0</td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
     <label for="brightness">Brightness</label>
     <input type="range"
            id="brightnessRange"
