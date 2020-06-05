@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Switch Jockey</title>
+    <title>Shaders Example</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,13 +9,15 @@
     <script src="https://unpkg.com/meyda/dist/web/meyda.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/7.0.0/math.min.js"></script>
-    <script src="scripts/models.js"></script>
-    <script src="scripts/audio.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r99/three.min.js"></script>
+    <script src="scripts/audio.js" async></script>
+    <script src="scripts/models.js" async></script>
+    <script src="scripts/shaders.js" async></script>
     <link rel="stylesheet" type="text/css" href="styles/style.css">
   </head>
   <body>
     <button>Start Web Audio</button>
-    <br>
+    <br><br>
     <audio
            controls
            loop
@@ -24,7 +26,7 @@
            src="assets/music/trimmed.wav"
            >
     </audio>
-    <br>
+    <br><br>
     <label for="level">Level</label>
     <input type="range"
            id="levelRange"
@@ -33,8 +35,7 @@
            max="1.0"
            step="0.001"
            />
-    <br>
-    <br>
+    <br><br>
     <label for="valence">Valence</label>
     <input type="range"
            id="valenceRange"
@@ -43,8 +44,7 @@
            max="1.0"
            step="0.001"
            />
-    <br>
-    <br>
+    <br><br>
     <table id="valence-table">
       <tbody>
         <tr>
@@ -62,8 +62,7 @@
            max="1.0"
            step="0.001"
            />
-    <br>
-    <br>
+    <br><br>
     <table id="arousal-table">
       <tbody>
         <tr>
@@ -72,5 +71,47 @@
         </tr>
       </tbody>
     </table>
+    <br>
+    <label for="brightness">Brightness</label>
+    <input type="range"
+           id="brightnessRange"
+           name="brightness"
+           min="0.0"
+           max="1.0"
+           step="0.001"
+           value="1"
+           />
+    <br><br>
+    <label for="complexity">Complexity</label>
+    <input type="range"
+           id="complexityRange"
+           name="complexity"
+           min="0.0"
+           max="1.0"
+           step="0.001"
+           value="0"
+           />
+    <br><br>
+    <label for="contrast">Contrast</label>
+    <input type="range"
+           id="contrastRange"
+           name="contrast"
+           min="0.0"
+           max="1.0"
+           step="0.001"
+           value="0"
+           />
+    <br><br>
+    <label for="movement">Movement</label>
+    <input type="range"
+           id="movementRange"
+           name="movement"
+           min="0.0"
+           max="1.0"
+           step="0.001"
+           value="0"
+           />
+    <br><br>
+    <canvas id="c"></canvas>
   </body>
 </html>
