@@ -6,7 +6,9 @@ const sliders = {
   'brightness': document.getElementById('brightnessRange'),
   'complexity': document.getElementById('complexityRange'),
   'contrast': document.getElementById('contrastRange'),
-  'movement': document.getElementById('movementRange')
+  'movement': document.getElementById('movementRange'),
+  'valence': document.getElementById('valenceRange'),
+  'arousal': document.getElementById('arousalRange')
 }
 
 const shaders = new Array();
@@ -109,26 +111,33 @@ function findNearestNeighbour(goal) {
   return nearestNeighbour;
 }
 
-function animate(time){
-  requestAnimationFrame(animate);
-
-  resizeRendererToDisplaySize(renderer);
-
-  analyser.getByteFrequencyData(audioData);
-
-  time *= 0.001;
-
-  uniforms.iTime.value = time;
-  uniforms.iResolution.value.set(canvas.width, canvas.height, 1);
-  uniforms.iChannel0.value.needsUpdate = true;
-
-  let goal = [];
-  for (let i of ['complexity', 'contrast', 'movement']) {
-    goal.push(parseFloat(sliders[i].value));
+function interpretAudioFeatures(preds) {
+  let goal;
+  let valence = parseFloat(sliders['valence'].value);
+  let arousal = parseFloat(sliders['arousal'].value);
+  if (valence < -0.33 && arousal < -0.33) {
+    goal = [0,0,0];
+  } else if (valence < -0.33 && arousal >= -0.33 && arousal < 0.33) {
+    goal = [0,0,0.5];
+  } else if (valence < -0.33 && arousal >= 0.33) {
+    goal = [0,0,1];
+  } else if (valence >= -0.33 && valence < 0.33 && arousal < -0.33) {
+    goal = [0.5,0.5,0];
+  } else if (valence >= -0.33 && valence < 0.33 && arousal >= -0.33 && arousal < 0.33) {
+    goal = [0.5,0.5,0.5];
+  } else if (valence >= -0.33 && valence < 0.33 && arousal >= 0.33) {
+    goal = [0.5,0.5,1];
+  } else if (valence >= 0.33 && arousal < -0.33) {
+    goal = [1,1,0];
+  } else if (valence >= 0.33 && arousal >= -0.33 && arousal < 0.33) {
+    goal = [1,1,0.5];
+  } else if (valence >= 0.33 && arousal >= 0.33) {
+    goal = [1,1,1];
   }
+  return goal;
+}
 
-  let nearestNeighbour = findNearestNeighbour(goal);
-
+function checkScene(nearestNeighbour) {
   // If a new scene is needed
   if (scene != nearestNeighbour['scene'] && nextScene == null) {
     lastBrightness = sliders['brightness'].value;
@@ -155,6 +164,28 @@ function animate(time){
   if (nextScene == null && lastBrightness == null) {
     uniforms.brightness.value = sliders['brightness'].value;
   }
+}
+
+function animate(time){
+  requestAnimationFrame(animate);
+
+  resizeRendererToDisplaySize(renderer);
+
+  analyser.getByteFrequencyData(audioData);
+
+  time *= 0.001;
+
+  uniforms.iTime.value = time;
+  uniforms.iResolution.value.set(canvas.width, canvas.height, 1);
+  uniforms.iChannel0.value.needsUpdate = true;
+
+  let goal = interpretAudioFeatures();
+  sliders['complexity'].value = goal[0];
+  sliders['contrast'].value = goal[1];
+  sliders['movement'].value = goal[2];
+
+  let nearestNeighbour = findNearestNeighbour(goal);
+  checkScene(nearestNeighbour);
 
   renderer.render(scene, camera);
 }
