@@ -19,3 +19,8 @@ label {
 table {
   background-color: lightgrey;
 }
+
+h3 {
+  background-color: lightgrey;
+  width: fit-content;
+}

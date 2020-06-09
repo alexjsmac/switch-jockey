@@ -16,17 +16,19 @@
     <link rel="stylesheet" type="text/css" href="styles/style.css">
   </head>
   <body>
-    <button>Start Web Audio</button>
+    <button>START</button>
     <br><br>
-    <audio
-           controls
-           loop
-           crossorigin="anonymous"
-           id="audio"
-           src="assets/music/trimmed.wav"
-           >
-    </audio>
+    <label for="brightness">Brightness</label>
+    <input type="range"
+           id="brightnessRange"
+           name="brightness"
+           min="0.0"
+           max="1.0"
+           step="0.001"
+           value="1"
+           />
     <br><br>
+    <h3>Read Only</h3>
     <label for="level">Level</label>
     <input type="range"
            id="levelRange"
@@ -72,16 +74,6 @@
       </tbody>
     </table>
     <br>
-    <label for="brightness">Brightness</label>
-    <input type="range"
-           id="brightnessRange"
-           name="brightness"
-           min="0.0"
-           max="1.0"
-           step="0.001"
-           value="1"
-           />
-    <br><br>
     <label for="complexity">Complexity</label>
     <input type="range"
            id="complexityRange"

@@ -1,4 +1,4 @@
-let analyser, audioData, uniforms, lastBrightness, scene, nextScene = null;
+let uniforms, lastBrightness, scene, nextScene = null;
 
 let scenes = new Array();
 
@@ -29,15 +29,6 @@ const loadShaders = async () => {
 }
 
 loadShaders();
-
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-document.querySelector('button').addEventListener('click', function() {
-  audioCtx.resume().then(() => {
-    startMic();
-    console.log('Playback resumed successfully');
-  });
-});
 
 const canvas = document.querySelector('#c');
 const renderer = new THREE.WebGLRenderer({canvas});
@@ -190,27 +181,7 @@ function animate(time){
   renderer.render(scene, camera);
 }
 
-navigator.getUserMedia  = navigator.getUserMedia ||
-                        navigator.webkitGetUserMedia ||
-                        navigator.mozGetUserMedia ||
-                        navigator.msGetUserMedia;
-
-function startMic(){
-  if (navigator.getUserMedia) {
-    navigator.getUserMedia({ audio: true, video: false }, function( stream ) {
-
-      analyser = audioCtx.createAnalyser();
-      const source = audioCtx.createMediaStreamSource(stream);
-
-      source.connect(analyser);
-
-      analyser.fftSize = 1024;
-      audioData = new Uint8Array(analyser.frequencyBinCount);
-
-      createScene();
-      animate();
-    }, function(){});
-  } else {
-    // fallback.
-  }
+function startShaders(){
+  createScene();
+  animate();
 }
