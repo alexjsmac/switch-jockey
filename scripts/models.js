@@ -16,8 +16,8 @@ let features_dict = {
 async function load() {
   console.log("Loading models...");
   models = {
-    'valence': await tf.loadGraphModel('./assets/models/valence/model.json'),
-    'arousal': await tf.loadGraphModel('./assets/models/arousal/model.json')
+    'valence': await tf.loadGraphModel('./assets/models/web_big_valence/model.json'),
+    'arousal': await tf.loadGraphModel('./assets/models/web_big_arousal/model.json')
   }
   console.log("Models loaded");
 }
