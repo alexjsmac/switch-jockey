@@ -4,6 +4,8 @@ let scenes = new Array();
 
 const sliders = {
   'brightness': document.getElementById('brightnessRange'),
+  'change': document.getElementById('changeRange'),
+  'level': document.getElementById('levelRange'),
   'complexity': document.getElementById('complexityRange'),
   'contrast': document.getElementById('contrastRange'),
   'movement': document.getElementById('movementRange'),
@@ -175,8 +177,18 @@ function animate(time){
   sliders['contrast'].value = goal[1];
   sliders['movement'].value = goal[2];
 
-  let nearestNeighbour = findNearestNeighbour(goal);
-  checkScene(nearestNeighbour);
+  var d = Math.random();
+  if (d < sliders['change'].value) {
+    let nearestNeighbour = findNearestNeighbour(goal);
+    checkScene(nearestNeighbour);
+  }
+
+  if (sliders['level'].value < 0.025) {
+    uniforms.brightness.value -= 0.01;
+  }
+  else {
+    uniforms.brightness.value = sliders['brightness'].value;
+  }
 
   renderer.render(scene, camera);
 }
