@@ -29,8 +29,10 @@ function readVisualFeatures(text) {
 }
 
 const loadShaders = async () => {
-  for (let i = 1; i < 9; i++) {    // How to get the number of shaders now?
-    let response = await fetch(`assets/shaders/audio${i}.frag`);
+  let set = document.getElementById('sets')
+  let numShaders = parseInt(document.getElementById('numShaders').value);
+  for (let i = 1; i < numShaders+1; i++) {
+    let response = await fetch(`assets/shaders/${set.value}/audio${i}.frag`);
     let code = await response.text();
     let visualFeatures = readVisualFeatures(code);
     shaders.push({
@@ -40,8 +42,6 @@ const loadShaders = async () => {
     })
   }
 }
-
-loadShaders();
 
 const canvas = document.querySelector('#c');
 const renderer = new THREE.WebGLRenderer({canvas});
@@ -204,7 +204,8 @@ function animate(time){
   renderer.render(scene, camera);
 }
 
-function startShaders(){
+async function startShaders(){
+  await loadShaders();
   createScene();
   animate();
 }
