@@ -32,3 +32,8 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord)
 void main() {
   mainImage(gl_FragColor, gl_FragCoord.xy);
 }
+
+// Visual Features
+// complexity=1
+// contrast=1
+// movement=0

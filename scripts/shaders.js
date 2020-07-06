@@ -1,6 +1,7 @@
 let uniforms, lastBrightness, scene, nextScene = null;
 
-let scenes = new Array();
+const scenes = new Array();
+const shaders = new Array();
 
 const sliders = {
   'brightness': document.getElementById('brightnessRange'),
@@ -13,18 +14,28 @@ const sliders = {
   'arousal': document.getElementById('arousalRange')
 }
 
-const shaders = new Array();
-const coordinates = [[0, 0, 0], [1, 0, 0], [1, 1, 0],
-                     [1, 1, 1], [0, 1, 1], [0, 0, 1],
-                     [1, 0, 1], [0, 1, 0]];
+const visualFeatureList = ['complexity', 'contrast', 'movement'];
+
+function readVisualFeatures(text) {
+  let visualFeatures = new Array();
+  for (let i in visualFeatureList) {
+    var regex = new RegExp("^// " + visualFeatureList[i] + "=(.*)$", "m");
+    var match = regex.exec(text);
+    if (match) {
+      visualFeatures.push(parseFloat(match[1]));
+    }
+  }
+  return visualFeatures;
+}
 
 const loadShaders = async () => {
-  for (let i = 1; i <= coordinates.length; i++) {
+  for (let i = 1; i < 9; i++) {    // How to get the number of shaders now?
     let response = await fetch(`assets/shaders/audio${i}.frag`);
     let code = await response.text();
+    let visualFeatures = readVisualFeatures(code);
     shaders.push({
       'name': `audio${i}`,
-      'coordinates': coordinates[i-1],
+      'coordinates': visualFeatures,
       'code': code
     })
   }
@@ -79,7 +90,7 @@ function createScene() {
     scene.add(new THREE.Mesh(plane, material));
     scenes.push({'coordinates': [shaders[i]['coordinates']], 'scene': scene});
   }
-  scene = scenes[0]['scene'];
+  scene = scenes[0]['scene'];  // Set initial scene
 }
 
 function resizeRendererToDisplaySize(renderer) {
