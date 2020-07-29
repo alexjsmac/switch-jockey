@@ -16,6 +16,12 @@ const sliders = {
 
 const visualFeatureList = ['complexity', 'contrast', 'movement'];
 
+var inputElement = document.getElementById('customSet');
+var customShaders;
+inputElement.onchange = function(e) {
+  customShaders = this.files;
+};
+
 function readVisualFeatures(text) {
   let visualFeatures = new Array();
   for (let i in visualFeatureList) {
@@ -29,17 +35,37 @@ function readVisualFeatures(text) {
 }
 
 const loadShaders = async () => {
-  let set = document.getElementById('sets')
-  let numShaders = parseInt(document.getElementById('numShaders').value);
-  for (let i = 1; i < numShaders+1; i++) {
-    let response = await fetch(`assets/shaders/${set.value}/audio${i}.frag`);
-    let code = await response.text();
-    let visualFeatures = readVisualFeatures(code);
-    shaders.push({
-      'name': `audio${i}`,
-      'coordinates': visualFeatures,
-      'code': code
-    })
+  if (customShaders == null) {
+    let set = document.getElementById('sets')
+    let numShaders;
+    if (set.value == "set1") {
+      numShaders = 8;
+    } else {
+      numShaders = 1;
+    }
+    for (let i = 1; i < numShaders+1; i++) {
+      let response = await fetch(`assets/shaders/${set.value}/audio${i}.frag`);
+      let code = await response.text();
+      let visualFeatures = readVisualFeatures(code);
+      shaders.push({
+        'name': `audio${i}`,
+        'coordinates': visualFeatures,
+        'code': code
+      })
+    }
+  }
+  else {
+    for (let i = 0; i < customShaders.length; i++) {
+      let url = URL.createObjectURL(customShaders[i]);
+      let response = await fetch(url);
+      let code = await response.text();
+      let visualFeatures = readVisualFeatures(code);
+      shaders.push({
+        'name': `audio${i}`,
+        'coordinates': visualFeatures,
+        'code': code
+      })
+    }
   }
 }
 
