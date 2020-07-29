@@ -18,6 +18,7 @@ function hideSettings() {
   for (element = 0; element < elementsToHide.length; element++) {
     let x = document.getElementById(elementsToHide[element]);
     x.style.display = "none";
-    x.style.height = "0%";
   }
+  let bg = document.getElementById("bg");
+  bg.style.background = "none";
 }

@@ -1,5 +1,7 @@
-body {
-  margin: 2em;
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%
 }
 
 #c {
@@ -11,20 +13,18 @@ body {
   z-index: -1;
 }
 
-label {
-  background-color: lightgrey;
-  padding: 0.125em;
+.bg {
+  background: url("../assets/images/background.png") no-repeat center center fixed;
+  color: white;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
-table {
-  background-color: lightgrey;
-}
-
-h3 {
-  background-color: lightgrey;
-  width: fit-content;
-}
-
-div {
-  margin: 1em;
+.controls {
+  margin: 0.5em;
 }

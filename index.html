@@ -17,129 +17,131 @@
     <link rel="stylesheet" type="text/css" href="styles/style.css">
   </head>
   <body>
-    <div>
-      <label for="sets" id="labelChoose">Choose a provided set:</label>
-      <select name="sets" id="sets">
-        <option value="set1">Set 1</option>
-        <option value="set2">Set 2</option>
-      </select>
-    </div>
-    <div>
-      <label for="customSet" id="labelCustom">Or upload a folder:</label>
-      <input id="customSet" name="customSet" type="file" webkitdirectory multiple/>
-    </div>
-    <div>
-      <button onclick="hideSettings()" id="startButton">START</button>
-    </div>
-    <div>
-      <label for="brightness">Brightness</label>
+    <div class="bg" id="bg">
+      <div class="controls">
+        <label for="sets" id="labelChoose">Choose a provided set:</label>
+        <select name="sets" id="sets">
+          <option value="set1">Set 1</option>
+          <option value="set2">Set 2</option>
+        </select>
+      </div>
+      <div class="controls">
+        <label for="customSet" id="labelCustom">Or upload a folder:</label>
+        <input id="customSet" name="customSet" type="file" webkitdirectory multiple/>
+      </div>
+      <div class="controls">
+        <button onclick="hideSettings()" id="startButton">START</button>
+      </div>
+      <div class="controls">
+        <label for="brightness">Brightness</label>
+        <input type="range"
+               id="brightnessRange"
+               name="brightness"
+               min="0.0"
+               max="1.0"
+               step="0.001"
+               value="1"
+               />
+      </div>
+      <div class="controls">
+        <label for="change">Change</label>
+        <input type="range"
+               id="changeRange"
+               name="change"
+               min="0.0"
+               max="1.0"
+               step="0.001"
+               value="0.5"
+               />
+      </div>
+      <div class="controls">
+        <button onclick="toggleSliders()">Toggle Sliders</button>
+      </div>
+      <div class="controls">
+        <label for="level" id="levelLabel">Level</label>
+        <input type="range"
+               id="levelRange"
+               name="level"
+               min="0.0"
+               max="0.5"
+               step="0.001"
+               value="0"
+               />
+      </div>
+      <div class="controls">
+      <label for="valence" id="valenceLabel">Valence</label>
       <input type="range"
-             id="brightnessRange"
-             name="brightness"
-             min="0.0"
-             max="1.0"
-             step="0.001"
-             value="1"
-             />
-    </div>
-    <div>
-      <label for="change">Change</label>
-      <input type="range"
-             id="changeRange"
-             name="change"
-             min="0.0"
-             max="1.0"
-             step="0.001"
-             value="0.5"
-             />
-    </div>
-    <div>
-      <button onclick="toggleSliders()">Toggle Sliders</button>
-    </div>
-    <div>
-      <label for="level" id="levelLabel">Level</label>
-      <input type="range"
-             id="levelRange"
-             name="level"
-             min="0.0"
-             max="0.5"
-             step="0.001"
-             value="0"
-             />
-    </div>
-    <div>
-    <label for="valence" id="valenceLabel">Valence</label>
-    <input type="range"
-           id="valenceRange"
-           name="valence"
-           min="-1.0"
-           max="1.0"
-           step="0.001"
-           />
-    </div>
-    <div>
-      <table id="valence-table">
-        <tbody>
-          <tr>
-            <td>Valence:</td>
-            <td>0.0</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div>
-      <label for="arousal" id="arousalLabel">Arousal</label>
-      <input type="range"
-             id="arousalRange"
-             name="arousal"
+             id="valenceRange"
+             name="valence"
              min="-1.0"
              max="1.0"
              step="0.001"
              />
-    </div>
-    <div>
-      <table id="arousal-table">
-        <tbody>
-          <tr>
-            <td>Arousal:</td>
-            <td>0.0</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div>
-      <label for="complexity" id="complexityLabel">Complexity</label>
+      </div>
+      <div class="controls">
+        <table id="valence-table">
+          <tbody>
+            <tr>
+              <td>Valence:</td>
+              <td>0.0</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="controls">
+        <label for="arousal" id="arousalLabel">Arousal</label>
+        <input type="range"
+               id="arousalRange"
+               name="arousal"
+               min="-1.0"
+               max="1.0"
+               step="0.001"
+               />
+      </div>
+      <div class="controls">
+        <table id="arousal-table">
+          <tbody>
+            <tr>
+              <td>Arousal:</td>
+              <td>0.0</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="controls">
+        <label for="complexity" id="complexityLabel">Complexity</label>
+        <input type="range"
+               id="complexityRange"
+               name="complexity"
+               min="0.0"
+               max="1.0"
+               step="0.001"
+               value="0"
+               />
+      </div>
+      <div class="controls">
+        <label for="contrast" id="contrastLabel">Contrast</label>
+        <input type="range"
+               id="contrastRange"
+               name="contrast"
+               min="0.0"
+               max="1.0"
+               step="0.001"
+               value="0"
+               />
+      </div>
+      <div class="controls">
+      <label for="movement" id="movementLabel">Movement</label>
       <input type="range"
-             id="complexityRange"
-             name="complexity"
+             id="movementRange"
+             name="movement"
              min="0.0"
              max="1.0"
              step="0.001"
              value="0"
              />
+      </div>
+      <canvas id="c"></canvas>
     </div>
-    <div>
-      <label for="contrast" id="contrastLabel">Contrast</label>
-      <input type="range"
-             id="contrastRange"
-             name="contrast"
-             min="0.0"
-             max="1.0"
-             step="0.001"
-             value="0"
-             />
-    </div>
-    <div>
-    <label for="movement" id="movementLabel">Movement</label>
-    <input type="range"
-           id="movementRange"
-           name="movement"
-           min="0.0"
-           max="1.0"
-           step="0.001"
-           value="0"
-           />
-    </div>
-    <canvas id="c"></canvas>
   </body>
 </html>
