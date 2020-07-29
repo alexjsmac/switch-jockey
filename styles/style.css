@@ -24,3 +24,7 @@ h3 {
   background-color: lightgrey;
   width: fit-content;
 }
+
+div {
+  margin: 1em;
+}
