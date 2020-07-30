@@ -9,6 +9,16 @@ button, select {
   font-family: "Lucida Console", Courier, monospace;
 }
 
+a {
+  float: right;
+}
+
+a:visited {
+  color: pink;
+  background-color: transparent;
+  text-decoration: none;
+}
+
 #c {
   width: 100% !important;
   height: 100% !important;

@@ -14,7 +14,7 @@ function toggleSliders() {
 }
 
 function hideSettings() {
-  let elementsToHide = ["labelChoose", "sets", "labelCustom", "customSet", "startButton"];
+  let elementsToHide = ["ghLink", "labelChoose", "sets", "labelCustom", "customSet", "startButton"];
   for (element = 0; element < elementsToHide.length; element++) {
     let x = document.getElementById(elementsToHide[element]);
     x.style.display = "none";
