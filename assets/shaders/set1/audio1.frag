@@ -1,4 +1,17 @@
+/*
+2D LED Spectrum - Visualiser
+Based on Led Spectrum Analyser by: simesgreen - 27th February, 2013 https://www.shadertoy.com/view/Msl3zr
+2D LED Spectrum by: uNiversal - 27th May, 2015
+Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
+*/
+
 #include <common>
+
+#if __VERSION__ < 130
+#define TEXTURE2D texture2D
+#else
+#define TEXTURE2D texture
+#endif
 
 uniform vec3      iResolution;
 uniform float     iTime;
@@ -7,25 +20,33 @@ uniform float     brightness;
 
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
-  // Normalized pixel coordinates (from 0 to 1)
-	vec2 uv = fragCoord / iResolution.xy;
+    // create pixel coordinates
+    vec2 uv = fragCoord.xy / iResolution.xy;
 
-	// first texture row is frequency data
-	float fft  = texture2D( iChannel0, vec2(uv.x,0.25) ).x;
+    // quantize coordinates
+    const float bands = 30.0;
+    const float segs = 40.0;
+    vec2 p;
+    p.x = floor(uv.x*bands)/bands;
+    p.y = floor(uv.y*segs)/segs;
 
-    // second texture row is the sound wave
-	float wave = texture2D( iChannel0, vec2(uv.x,0.75) ).x;
+    // read frequency data from first row of texture
+    float fft  = TEXTURE2D( iChannel0, vec2(p.x,0.0) ).x;
 
-	// convert frequency to colors
-	vec3 col = vec3(1.0)*fft;
+    // led color
+    vec3 color = mix(vec3(0.0, 2.0, 0.0), vec3(2.0, 0.0, 0.0), sqrt(uv.y));
 
-    // add wave form on top
-	col += 1.0 -  smoothstep( 0.0, 0.01, abs(wave - uv.y) );
+    // mask for bar graph
+    float mask = (p.y < fft) ? 1.0 : 0.1;
 
-    col = pow( col, vec3(1.0,0.5,2.0) );
+    // led shape
+    vec2 d = fract((uv - p) *vec2(bands, segs)) - 0.5;
+    float led = smoothstep(0.5, 0.35, abs(d.x)) *
+                smoothstep(0.5, 0.35, abs(d.y));
+    vec3 ledColor = led*color*mask;
 
-	// output final color
-	fragColor = vec4(col,1.0) * brightness;
+    // output final color
+    fragColor = vec4(ledColor, 1.0) * brightness;
 }
 
 void main() {
@@ -33,6 +54,6 @@ void main() {
 }
 
 // Visual Features
-// complexity=0
+// complexity=1
 // contrast=0
 // movement=0

@@ -39,11 +39,13 @@ const loadShaders = async () => {
     let set = document.getElementById('sets')
     let numShaders;
     if (set.value == "set1") {
-      numShaders = 8;
-    } else {
-      numShaders = 1;
+      numShaders = 3;
+    } else if (set.value == "set2") {
+      numShaders = 3;
+    } else if (set.value == "set3") {
+      numShaders = 3;
     }
-    for (let i = 1; i < numShaders+1; i++) {
+    for (let i = 0; i < numShaders; i++) {
       let response = await fetch(`assets/shaders/${set.value}/audio${i}.frag`);
       let code = await response.text();
       let visualFeatures = readVisualFeatures(code);

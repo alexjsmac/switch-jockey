@@ -1,12 +1,3 @@
-/*
-2D LED Spectrum - Visualiser
-Based on Led Spectrum Analyser by: simesgreen - 27th February, 2013 https://www.shadertoy.com/view/Msl3zr
-2D LED Spectrum by: uNiversal - 27th May, 2015
-Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
-*/
-
-#include <common>
-
 #if __VERSION__ < 130
 #define TEXTURE2D texture2D
 #else
@@ -18,35 +9,35 @@ uniform float     iTime;
 uniform sampler2D iChannel0;
 uniform float     brightness;
 
+float hz(float hz)
+{
+    float u = hz/11000.0;
+    return TEXTURE2D(iChannel0,vec2(u,0.25)).x;
+}
+
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
-    // create pixel coordinates
     vec2 uv = fragCoord.xy / iResolution.xy;
 
-    // quantize coordinates
-    const float bands = 30.0;
-    const float segs = 40.0;
-    vec2 p;
-    p.x = floor(uv.x*bands)/bands;
-    p.y = floor(uv.y*segs)/segs;
+    // 3 dancing magenta, cyan & yellow sine waves
+    float v1 = 0.02 + 0.4*hz(100.0);
+    float v2 = 0.02 + 0.4*hz(500.0);
+    float v3 = 0.02 + 0.4*hz(2000.0);
+    vec3 col = vec3(0.0, 0.0, 0.0);
+    float v1x = uv.x - 0.5 + sin(5.0*iTime + 1.5*uv.y)*v1;
+    float v2x = uv.x - 0.2 + sin(3.0*iTime + 0.8*uv.y)*v2;
+    float v3x = uv.x - 0.3 + sin(7.0*iTime + 3.2*uv.y)*v3;
+    col += vec3(1.0,0.0,1.0) * abs(0.066/v1x) * v1;
+    col += vec3(1.0,1.0,0.0) * abs(0.066/v2x) * v2;
+    col += vec3(0.0,1.0,1.0) * abs(0.066/v3x) * v3;
 
-    // read frequency data from first row of texture
-    float fft  = TEXTURE2D( iChannel0, vec2(p.x,0.0) ).x;
+    // with a lighted disco floor pattern
+    float uvy2 = 0.4*iTime-uv.y;
+    float a1 = max(0.0,0.25*hz(200.0)) *
+        max(0.0,min(1.0,sin(50.0*uv.x)*sin(50.0*uvy2)));
+    col += vec3(1.0,1.0,1.0) * a1;
 
-    // led color
-    vec3 color = mix(vec3(0.0, 2.0, 0.0), vec3(2.0, 0.0, 0.0), sqrt(uv.y));
-
-    // mask for bar graph
-    float mask = (p.y < fft) ? 1.0 : 0.1;
-
-    // led shape
-    vec2 d = fract((uv - p) *vec2(bands, segs)) - 0.5;
-    float led = smoothstep(0.5, 0.35, abs(d.x)) *
-                smoothstep(0.5, 0.35, abs(d.y));
-    vec3 ledColor = led*color*mask;
-
-    // output final color
-    fragColor = vec4(ledColor, 1.0) * brightness;
+    fragColor = vec4(col,1.0) * brightness;
 }
 
 void main() {
@@ -54,6 +45,6 @@ void main() {
 }
 
 // Visual Features
-// complexity=1
+// complexity=0
 // contrast=0
-// movement=0
+// movement=1

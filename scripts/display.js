@@ -19,6 +19,10 @@ function hideSettings() {
     let x = document.getElementById(elementsToHide[element]);
     x.style.display = "none";
   }
+  let all = document.getElementsByClassName("setup");
+  for (var i = 0; i < all.length; i++) {
+    all[i].style.margin = "0";
+  }
   let bg = document.getElementById("bg");
   bg.style.background = "none";
 }
