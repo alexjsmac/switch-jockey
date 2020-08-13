@@ -22,7 +22,7 @@ There are a few shader sets to choose from by default but you can also load your
       shader2.frag
       ...
     ```
-2. (Optional) Add a brightness uniform to the shaders so that the brightness slider in the application can have an effect:
+2. Add a brightness uniform to the shaders so that the brightness slider in the application can have an effect:
     ```
     uniform float     brightness;
     ...
@@ -36,4 +36,4 @@ There are a few shader sets to choose from by default but you can also load your
     // contrast=0
     // movement=0
     ```
-4. Now in the app you can just select your folder of shaders and they should load and be displayed.
+4. Now in the app you can upload your folder of shaders and they should load and be displayed.
